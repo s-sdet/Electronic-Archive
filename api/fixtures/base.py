@@ -1,7 +1,5 @@
 import json
-import requests
 import logging
-from requests import Response
 
 logger = logging.getLogger("Electronic Archive")
 

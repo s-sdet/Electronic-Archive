@@ -4,9 +4,9 @@ from dataclasses import dataclass
 @dataclass
 class AuthorizeIS4:
     """Данные для авторизации в IS4."""
-    client_id = "individuals_electronic_archive"
+    client_id = "***"
     redirect_uri = "***"
-    response_type = "code"
+    response_type = "***"
     scope = "***"
     state = "***"
     nonce = "***"
@@ -18,10 +18,10 @@ class AuthorizeIS4:
 @dataclass
 class Auth:
     """Данные для получения токена."""
-    client_id = "individuals_electronic_archive"
-    grant_type = "authorization_code"
+    client_id = "***"
+    grant_type = "***"
     code_verifier = "***"
-    scope = "****"
+    scope = "***"
     redirect_uri = "***"
     login = ""
     password = ""

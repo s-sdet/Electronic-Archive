@@ -37,10 +37,10 @@ class Document(BaseClass):
         [doc_type.doc_type_name_latin, "DateTime", "ДатаВремя", "DateTime", "1", "DateTime", "2025-05-20", None, None],
         # Создание документа с обязательным типом метаданных string_1 (регулярное выражение с числами):
         [doc_type.doc_type_name_latin, "string_1", "Строковое регулярное", "String", "1", "string_1", "12 34",
-         "regularExpression", "^\d{2} \d{2}$"],
+         "regularExpression", "^\\d{2} \\d{2}$"],
         # Создание документа с обязательным типом метаданных String (регулярное выражение почта):
         [doc_type.doc_type_name_latin, "String", "Строковое регулярное", "String", "1", "String", "livespase@akbars.ru",
-         "regularExpression", "^[\S]+@[\S]+.[\S]+$"],
+         "regularExpression", "^[\\S]+@[\\S]+.[\\S]+$"],
         # Создание документа с обязательным типом метаданных Boolean:
         [doc_type.doc_type_name_latin, "Boolean", "Булево", "Boolean", "1", "Boolean", True, None, None]
     ]
@@ -70,8 +70,8 @@ class Document(BaseClass):
     ]
 
     @staticmethod
-    def data_for_creating_document_with_required_metadata_type(doc_type_id: str, name: str, metadata_type: str,
-                                                               metadata_type_value=None):
+    def data_for_creating_document_with_required_metadata_type(doc_type_id: str, name: str = "Тестовый док",
+                                                               metadata_type=None, metadata_type_value=None):
         """
         Тело запроса для создания документа с указанием обязательного типа метаданных.
         :param doc_type_id: ID типа документа;
@@ -153,18 +153,18 @@ class Document(BaseClass):
         return data
 
     @staticmethod
-    def json_data_for_saving_document():
+    def json_data_for_saving_document(doc_type_id=None):
         """Тело запроса для сохранения документа и версии с указанием дополнительных метаданных."""
-        data = {"documentTypeId": "68d0dc25-9c83-3730-07a4-64f843995846",
+        data = {"documentTypeId": doc_type_id,
                 "documentProperties":
                     {"Тестовое поле": "Для тестирования дополнительных метаданных"}
                 }
         return data
 
     @staticmethod
-    def data_for_create_document_and_its_version_in_test_document_type():
+    def data_for_create_document_and_its_version_in_test_document_type(doc_type_id=None):
         """Тело запроса для создания документа и его версии в тестовом типе документа CoreTeam."""
-        data = {"documentTypeId": "68d0dc25-9c83-3730-07a4-64f843995846",
+        data = {"documentTypeId": doc_type_id,
                 "documentProperties": {},
                 "expireDate": "2023-08-07T11:00:46.1310000",
                 "sourceDate": "2023-08-07T11:00:46.1310000",
@@ -182,11 +182,11 @@ class Document(BaseClass):
         return data
 
     @staticmethod
-    def data_for_creating_document_indicating_file_id(file_id=None):
+    def data_for_creating_document_indicating_file_id(doc_type_id=None, file_id=None):
         """Тело запроса для сохранения документа и его версии с указанием id загруженного в систему файла,
         дополнительных метаданных, дат добавления документа и версии в систему-источник и даты окончания действия."""
         data = {
-                "documentTypeId": "68d0dc25-9c83-3730-07a4-64f843995846",
+                "documentTypeId": doc_type_id,
                 "documentProperties": {
                     "Boolean": "false",
                     "Date": "2023-09-14T20:00:00.000Z",
@@ -204,11 +204,65 @@ class Document(BaseClass):
         return data
 
     @staticmethod
-    def for_saving_document_with_date():
+    def data_for_creating_document_with_expire_and_source_date(doc_type_id=None, name="Тестовый док", file_id=None):
+        """
+        Тело запроса для создания документа с передачей ID загруженного файла и указанием начала и окончания документа.
+        :param doc_type_id: ID типа документа;
+        :param name: Имя документа;
+        :param file_id: ID загруженного файла;
+        """
+        data = {
+            "documentTypeId": doc_type_id,
+            "name": name,
+            "documentProperties": {},
+            "expireDate": "2024-12-31T11:11:39.8510000",
+            "sourceDate": "2023-08-04T11:11:39.8510000",
+            "files": [f"{file_id}"]
+        }
+        return data
+
+    @staticmethod
+    def data_for_creating_document_without_properties_and_files(doc_type_id=None, name="Тестовый док"):
+        """
+        Тело запроса для создания документа с передачей пустых значений в "documentProperties" и "files".
+        :param doc_type_id: ID типа документа;
+        :param name: Имя документа;
+        """
+        data = {
+            "documentTypeId": doc_type_id,
+            "name": name,
+            "documentProperties": {},
+            "files": []
+        }
+        return data
+
+    @staticmethod
+    def data_for_creating_document_with_entities(doc_type_id=None, entity_type: str = "DebitCard",
+                                                 entity_key: str = "1222"):
+        """
+        Тело запроса для создания документа с передачей entities.
+        :param doc_type_id: ID типа документа;
+        :param entity_type: Ключ entities;
+        :param entity_key: Значение entities;
+        """
+        data = {
+                "documentTypeId": doc_type_id,
+                "documentProperties": {},
+                "files": [],
+                "entities": [{
+                    "documentEntityType": entity_type,
+                    "entityKey": entity_key,
+                    "properties": {}
+                }]
+            }
+        return data
+
+    @staticmethod
+    def for_saving_document_with_date(doc_type_id=None):
         """Тело запроса для сохранения документа и его версии документа с указанием даты окончания действия,
         даты создания версии в системе-источнике, дополнительными метаданными, БЕЗ прикрепления файлов и
         БЕЗ основных 6 полей метаданных."""
-        data = {"documentTypeId": "68d0dc25-9c83-3730-07a4-64f843995846",
+        data = {"documentTypeId": doc_type_id,
                 "documentProperties":
                     {"Тестовое поле": "Для тестирования дополнительных метаданных"},
                 "expireDate": "2023-08-05T08:07:18.4380000",
@@ -219,9 +273,9 @@ class Document(BaseClass):
         return data
 
     @staticmethod
-    def json_data_for_creating_document_whit_one_version():
+    def json_data_for_creating_document_whit_one_version(doc_type_id=None):
         """Тело запроса для создания документа и его одной версии."""
-        data = {"documentTypeId": "68d0dc25-9c83-3730-07a4-64f843995846",
+        data = {"documentTypeId": doc_type_id,
                 "documentProperties":
                     {"Дополнительные метаданные": "Метаданные"},
                 "expireDate": "2023-07-06T11:12:34.833Z",
@@ -231,8 +285,7 @@ class Document(BaseClass):
                     {"documentEntityType": "CreditDossier",
                      "entityKey": "string",
                      "properties": {}
-                     }
-                ]
+                     }]
                 }
         return data
 
@@ -279,7 +332,8 @@ class Document(BaseClass):
             headers=header,
             json=data
         )
-        logger.info(f"POST Save Document. Status code: {res.status_code}")
+        logger.info(f"POST: Сохранение документа. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
         assert res.status_code == response
         return res.json()
 
@@ -332,7 +386,7 @@ class Document(BaseClass):
         assert res.status_code == response
         return res.json()
 
-    def get_doc_info_by_doc_id(self, api_version=None, doc_id=None, header=None, response=200) -> Response:
+    def get_doc_info_by_doc_id(self, api_version="api/v3.0/", doc_id=None, header=None, response=200) -> Response:
         """
         Получение информации о конкретной версии документа по ее id.
         :param api_version: URL версии API;
@@ -346,6 +400,7 @@ class Document(BaseClass):
             headers=header
         )
         logger.info(f"GET: Получение данных по ID документа. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
         assert res.status_code == response
         return res.json()
 
@@ -369,4 +424,22 @@ class Document(BaseClass):
         )
         logger.info(f"GET Data by Document Version ID. Status code: {res.status_code}")
         assert res.status_code == response
+        return res.json()
+
+    def get_document_by_version_id(self, url_api="api/v4.0/", ver_id=None, header=None, status_code=200) -> Response:
+        """
+        Получение данных документа по идентификатору версии.
+        :param url_api: URL версии API;
+        :param ver_id: ID версии документа
+        :param header: Токен авторизации;
+        :param status_code: Ожидаемый ответ сервера;
+        """
+        res = request(
+            method="GET",
+            url=f"{self.app.url}{url_api}Document/Version/{ver_id}",
+            headers=header
+        )
+        logger.info(f"GET: Получение данных документа по versionID. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
+        assert res.status_code == status_code
         return res.json()

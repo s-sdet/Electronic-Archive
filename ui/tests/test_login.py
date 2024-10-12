@@ -4,8 +4,8 @@ from pytest_testrail.plugin import pytestrail
 
 class TestLoginPage:
     """
-    Тесты для страницы авторизации https://electronicarchive-frontend-afds.akbars.ru/
-    Авторизация осуществляется через https://identity-server-is4.akbars.ru/
+    Тесты для страницы авторизации ***
+    Авторизация осуществляется через ***
     """
 
     @pytest.mark.lp

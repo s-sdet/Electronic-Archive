@@ -3,8 +3,7 @@ from ui.data.constants import DocumentNotice
 
 class TestCreatePrecondition:
     """
-    Тесты для создания сущностей перед прогоном тестов
-    https://electronicarchive-frontend-afds.dev.akbars.ru/
+    Тесты для создания сущностей перед прогоном тестов***
     """
 
     def test_create_doc_type_ea_123(self, app, go_to_admin_panel):

@@ -103,7 +103,8 @@ class Validation(BaseClass):
         [ApiVersions.API_V4, doc_type.doc_type_name_latin, file_type.file_type_name_latin,
          ValidationNotice.EXTENSIONS["CYRILLIC"], "DocumentType", ValidationNotice.ERROR_INVALID_EXTENSIONS],
         [ApiVersions.API_V4, doc_type.doc_type_name_latin, file_type.file_type_name_latin,
-         ValidationNotice.EXTENSIONS["NUMBERS_LENGTH_65"], "DocumentType", ValidationNotice.ERROR_EXTENSIONS_MAX_LENGTH],
+         ValidationNotice.EXTENSIONS["NUMBERS_LENGTH_65"], "DocumentType",
+         ValidationNotice.ERROR_EXTENSIONS_MAX_LENGTH],
         [ApiVersions.API_V4, doc_type.doc_type_name_latin, file_type.file_type_name_latin,
          ValidationNotice.EXTENSIONS["WITHOUT_SPACES"], "DocumentType", ValidationNotice.ERROR_INVALID_EXTENSIONS]
     ]
@@ -140,7 +141,7 @@ class Validation(BaseClass):
 
     @staticmethod
     def creating_document_type(doc_type_name=None, system_type_name="test", display_name="test", file_name=None,
-                               extensions=".pdf"):
+                               extensions=".pdf", is_required=True):
         """
         Тело запроса для создания типа документа.
         :param doc_type_name: Название типа документа;
@@ -148,6 +149,7 @@ class Validation(BaseClass):
         :param display_name: Название, которое будет отображаться;
         :param file_name: Системное название файла;
         :param extensions: Расширение файла;
+        :param is_required: Обязательность указания типа файлов: True или False;
         """
         data = {
             "name": f"{doc_type_name}",
@@ -162,7 +164,7 @@ class Validation(BaseClass):
             "fileTypes": [{
                 "name": f"{file_name}",
                 "allowedExtensions": [extensions],
-                "isRequired": True
+                "isRequired": is_required
             }]
         }
         return data

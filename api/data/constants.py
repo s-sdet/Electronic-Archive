@@ -43,6 +43,9 @@ class ValidationNotice:
                                 "только латиницу и цифры")
     ERROR_EXTENSIONS_DUPLICATED = "Расширения не должны дублироваться"
 
+    ERROR_DOC_NAME_NULL = "Не задано имя документа"
+    ERROR_DOC_NAME_MAX_LENGTH = "Имя документа не должно быть больше 64 знаков"
+
     # Данные для валидации поля "Системное название типа"
     SYSTEM_TYPE_NAME = {
         "LATIN_LENGTH_65": "System Type Name System Type Name System Type Name System Type Na",
@@ -93,13 +96,13 @@ class DocumentTypeNotice:
     @property
     def doc_type_name_latin(self):
         """Метод генерации имени типа документа на латинице без спецсимволов для тестов валидации полей."""
-        name = f"Document type {random.randint(1, 1000000)}"
+        name = f"Document type {random.randint(1, 1000000000)}"
         return name
 
     @property
     def doc_type_name_cyrillic(self):
         """Метод генерации имени типа документа на кириллице без спецсимволов для тестов валидации полей."""
-        name = f"Тип документа {random.randint(1, 1000000)}"
+        name = f"Тип документа {random.randint(1, 1000000000)}"
         return name
 
 
@@ -144,4 +147,4 @@ class FileNotice:
     ERROR_FILE_TYPE_ID = "Не найдены типы файлов с идентификаторами: {}."  # Текст ошибки невалидного типа файла
     ERROR_DOC_TYPE_ID = "Не найдены типы документов с идентификаторами: {}."  # Текст ошибки невалидного типа документа
     ERROR_DOCUMENT_ID = "The value '{}' is not valid for DocumentId."  # Текст ошибки невалидного ID документа
-    ERROR_FILE_NOT_UPLOAD = "The Files field is required."  # Текст ошибки при незагруженном файле
+    ERROR_FILE_NOT_UPLOAD = "Не приложены файлы"  # Текст ошибки при незагруженном файле

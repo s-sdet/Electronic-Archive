@@ -32,7 +32,7 @@ class CreateEntitiesModel:
 
 
 class EntitiesPage(BasePage):
-    """Страница поиска и создания сущностей https://electronicarchive-frontend-afds.dev.akbars.ru/entities/search"""
+    """Страница поиска и создания сущностей ***"""
 
     LINK_ENTITIES = (By.XPATH, "//div[@id='root']//nav/div[2]/div[2]")  # Ссылка на раздел Сущности
     TITLE_ENTITIES = (By.XPATH, "//h2[contains(text(), 'Сущности')]")  # Заголовок раздела
@@ -40,7 +40,7 @@ class EntitiesPage(BasePage):
     # Кнопки
     BUTTON_ENTITY_CREATE = (By.XPATH, "//span[contains(text(), 'Создать тип сущности')]")  # Создать тип сущности
     BUTTON_ADD_ATTRIBUTE = (By.XPATH, "//span[contains(text(), 'Добавить атрибут')]")  # Добавить атрибут
-    BUTTON_ADD = (By.XPATH, "//div[@class='sc-kFCsca dUsTPr']/form/div[2]/div")  # Добавить
+    BUTTON_ADD = (By.XPATH, "//span[text()='Добавить']")  # Добавить
     BUTTON_CREATE = (By.XPATH, "//span[contains(text(), 'Создать')]")  # Создать
 
     # Поля для ввода данных типа сущности
@@ -49,9 +49,9 @@ class EntitiesPage(BasePage):
 
     # Поля для ввода данных атрибута
     FIELD_ATTRIBUTE_NUMBER = (By.NAME, "displayIndex")  # Порядковый номер
-    FIELD_ATTRIBUTE_SYSTEM_NAME = (By.XPATH, "//div[@class='sc-kFCsca dUsTPr']/form/div/div[2]//input")  # Системное
-    FIELD_ATTRIBUTE_DISPLAY_NAME = (By.XPATH, "//div[@class='sc-kFCsca dUsTPr']/form/div/div[3]//input")  # Отображаемое
-    FIELD_DATA_TYPE = (By.XPATH, "//div[@class='sc-kFCsca dUsTPr']/form/div/div[4]")  # Тип данных
+    FIELD_ATTRIBUTE_SYSTEM_NAME = (By.XPATH, "//div[@class='sc-dAlyuH kYRLXB']/form/div/div[2]//input")  # Системное
+    FIELD_ATTRIBUTE_DISPLAY_NAME = (By.XPATH, "//div[@class='sc-dAlyuH kYRLXB']/form/div/div[3]//input")  # Отображаемое
+    FIELD_DATA_TYPE = (By.XPATH, "//div[@class='sc-dAlyuH kYRLXB']/form/div/div[4]")  # Тип данных
 
     DATA_TYPE = (By.XPATH, "//div[@id='menu-valueType']//ul/li[1]")  # Тип данных
     CHECKBOX = (By.XPATH, "//label[@data-testid='formCheckbox']")  # Чексбокс Обязательный

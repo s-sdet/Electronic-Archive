@@ -5,8 +5,7 @@ from ui.fixtures.pages.administration.document_types import CreateDocumentsTypeM
 
 class TestDocumentsType:
     """
-    Тесты для типов документов
-    https://electronicarchive-frontend-afds.dev.akbars.ru/administration
+    Тесты для типов документов***
     """
 
     @pytest.mark.lp

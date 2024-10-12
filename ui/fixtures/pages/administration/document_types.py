@@ -1,6 +1,5 @@
 import random
 import logging
-import time
 
 from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
@@ -29,11 +28,11 @@ class CreateDocumentsTypeModel:
 
     @staticmethod
     def random_valid_data_for_doc_type():
-        document_type_name = f"{DocumentsTypeNotice.DOCUMENT_TYPE_NAME}{random.randint(10, 1000)}"
-        file_type_name = f"{DocumentsTypeNotice.FILE_TYPE_NAME}{random.randint(10, 1000)}"
+        document_type_name = f"{DocumentsTypeNotice.DOCUMENT_TYPE_NAME}{random.randint(10, 10000)}"
+        file_type_name = f"{DocumentsTypeNotice.FILE_TYPE_NAME}{random.randint(10, 10000)}"
         file_extensions = DocumentsTypeNotice.FILE_EXTENSIONS
-        field_type_name = f"{DocumentsTypeNotice.FIELD_TYPE_NAME}{random.randint(10, 1000)}"
-        field_type_name_display = f"{DocumentsTypeNotice.FIELD_TYPE_NAME_DISPLAY}{random.randint(10, 1000)}"
+        field_type_name = f"{DocumentsTypeNotice.FIELD_TYPE_NAME}{random.randint(10, 10000)}"
+        field_type_name_display = f"{DocumentsTypeNotice.FIELD_TYPE_NAME_DISPLAY}{random.randint(10, 10000)}"
         return CreateDocumentsTypeModel(document_type_name=document_type_name, file_type_name=file_type_name,
                                         file_extensions=file_extensions, field_type_name=field_type_name,
                                         field_type_name_display=field_type_name_display)
@@ -41,8 +40,7 @@ class CreateDocumentsTypeModel:
 
 class DocumentsTypePage(BasePage):
     """
-    Страница администрирования типов документов
-    https://electronicarchive-frontend-afds.dev.akbars.ru/administration
+    Страница администрирования типов документов ***
     """
 
     # Кнопки
@@ -51,8 +49,8 @@ class DocumentsTypePage(BasePage):
     BUTTON_CREATE_FOLDER = (By.XPATH, "//span[text()='Папку']")  # Кнопка "Папку"
     BUTTON_ADD_FILE_TYPE = (By.XPATH, "//form/div[2]//span[text()='Добавить']")  # Кнопка "Добавить" тип файла
     BUTTON_ADD_FIELD_TYPE = (By.XPATH, "//form/div[3]//span[text()='Добавить']")  # Кнопка "Добавить" тип полей
-    BUTTON_ADD = (By.XPATH, "//div[@class='Modal-Window']//span[text()='Добавить']")  # Кнопка "Добавить"
-    BUTTON_CANCEL = (By.XPATH, "//div[@class='Modal-Window']//span[text()='Отмена']")  # Кнопка "Отмена"
+    BUTTON_ADD = (By.XPATH, "//div[@class='Modal-Window Dialog']//span[text()='Добавить']")  # Кнопка "Добавить"
+    BUTTON_CANCEL = (By.XPATH, "//div[@class='Modal-Window Dialog']//span[text()='Отмена']")  # Кнопка "Отмена"
     BUTTON_CONFIRM = (By.XPATH, "//span[text()='Подтвердить']")  # Кнопка "Подтвердить"
     BUTTON_DELETE = (By.XPATH, "//span[text()='Удалить']")  # Кнопка "Удалить"
     BUTTON_FOLDER_MENU = (By.XPATH, "//div[text()='Папка 393']//following::div/button")  # Кнопка вызова меню папки
@@ -101,7 +99,7 @@ class DocumentsTypePage(BasePage):
     SUCCESS_FOLDER_CREATE = (By.XPATH, "//div[@class='MuiCollapse-wrapperInner']")  # Уведомление создания папки
     SUCCESS_FOLDER_SAVE = (By.XPATH, "//div[@class='MuiCollapse-wrapperInner']")  # Уведомление изменения папки
 
-    ELEMENT_TO_WAIT_PAGE_TO_LOAD = (By.XPATH, "//div[@class='sc-jnldDj fbeZwT']/div[20]")  # Локатор для ожидания
+    ELEMENT_TO_WAIT_PAGE_TO_LOAD = (By.XPATH, "//h2[@class='sc-gEvEer DudLf']")  # Локатор для ожидания
     NAME_FIRST_GROUP = (By.XPATH, "//div[@role='dialog']/div/div[2]//tbody/tr[2]/td[2]/span")  # Название первой группы
     NAME_SECOND_GROUP = (By.XPATH, "//div[@role='dialog']/div/div[2]//tbody/tr[1]/td[2]/span")  # Название второй группы
 
@@ -160,9 +158,11 @@ class DocumentsTypePage(BasePage):
         self.click(locator=self.CLOSE_FILE_TYPE_SELECTION)  # Закрытие выпадашки после выбора расширения файла
         self.adding_type() if adding_type else self.cancel_adding_type()
 
-    def data_entry_metadata_type(self, data: CreateDocumentsTypeModel, adding_type: bool = True):
+    def data_entry_metadata_type(self, data: CreateDocumentsTypeModel, adding_required: bool = True,
+                                 adding_type: bool = True):
         """
         Заполнение данных в форме типов метаданных.
+        :param adding_required: По-умолчанию вызывается метод выбора чекбокса, если adding_required=False - Отменить
         :param data: Модель генерации валидных данных для создания полей документа
         :param adding_type: По-умолчанию вызывается метод нажатия кнопки Добавить, если adding_type=False - Отменить
         """
@@ -178,16 +178,23 @@ class DocumentsTypePage(BasePage):
         self.send_keys(locator=self.FIELD_TYPE_NAME, value=data.field_type_name)  # Ввод названия типа данных
         self.send_keys(locator=self.FIELD_TYPE_NAME_DISPLAY, value=data.field_type_name_display)  # Ввод отображаемого
         # названия типа поля
+        self.adding_required() if adding_required else self.cancel_adding_required()
         self.adding_type() if adding_type else self.cancel_adding_type()
+
+    def adding_required(self):
+        """Выбор чекбокса 'Обязательный'"""
+        self.click(locator=self.CHECKBOX_REQUIRED)  # Выбор чекбокса "Обязательный"
+
+    def cancel_adding_required(self):
+        """Отмена выбора чекбокса 'Обязательный'"""
+        pass
 
     def adding_type(self):
         """Добавление типов в создаваемый тип документа"""
-        self.click(locator=self.CHECKBOX_REQUIRED)  # Выбор чекбокса "Обязательный"
         self.click(locator=self.BUTTON_ADD)  # Клик кнопки "Добавить"
 
     def cancel_adding_type(self):
         """Отмена добавления типов в создаваемый тип документа"""
-        self.click(locator=self.CHECKBOX_REQUIRED)  # Выбор чекбокса "Обязательный"
         self.click(locator=self.BUTTON_CANCEL)  # Клик кнопки "Отмена"
 
     def creation_type(self):
@@ -240,6 +247,16 @@ class DocumentsTypePage(BasePage):
         self.element_is_enabled(locator=self.SUCCESS_TYPE_CREATE)  # Ожидание элемента
         logger.info(f"Текст уведомления: {self.get_text(locator=self.SUCCESS_TYPE_CREATE)}")
         assert self.get_text(locator=self.SUCCESS_TYPE_CREATE) == DocumentsTypeNotice.SUCCESS_TYPE_CREATE
+
+    def create_doc_type(self, adding_required: bool = True, adding_type: bool = True):
+        """Создание типа документа."""
+        data = CreateDocumentsTypeModel.random_valid_data_for_doc_type()
+        self.open_form_doc_type_create()
+        self.data_entry_doc_type(data=data)
+        self.data_entry_file_types(data=data)
+        self.data_entry_metadata_type(data=data, adding_required=adding_required, adding_type=adding_type)
+        self.creation_type()
+        return data.document_type_name
 
     def delete_document_type(self, type_name):
         """Удаление типа документа и его копии из списка."""

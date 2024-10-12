@@ -22,5 +22,6 @@ class History(BaseClass):
             headers=header
         )
         logger.info(f"GET: Получение истории изменений версии документа. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
         assert res.status_code == response
         return res.json()

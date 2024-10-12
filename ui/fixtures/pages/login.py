@@ -10,11 +10,11 @@ logger = logging.getLogger("Electronic Archive")
 
 class LoginPage(BasePage):
     """
-    Страница авторизации https://electronicarchive-frontend-afds.akbars.ru/
-    Авторизация осуществляется через https://identity-server-is4.akbars.ru/
+    Страница авторизации ***
+    Авторизация осуществляется через ***
     """
     LOGIN_PANEL_TITLE = (By.XPATH, "//h3[text()='Авторизация']")  # Заголовок текста формы авторизации
-    TITLE_SEARCH_DOCUMENTS = (By.XPATH, "//h2[contains(text(), 'Поиск документов')]")  # Заголовок раздела
+    TITLE_SEARCH_DOCUMENTS = (By.XPATH, "//h4[contains(text(), 'Поиск документов')]")  # Заголовок раздела
     MOFFICE_TAB = (By.XPATH, "//label[@for='MOFFICE']")  # Вкладка домена авторизации в форме
     USERNAME_FIELD = (By.ID, "UserName")  # Поле ввода логина
     PASSWORD_FIELD = (By.ID, "Password")  # Поле воода пароля

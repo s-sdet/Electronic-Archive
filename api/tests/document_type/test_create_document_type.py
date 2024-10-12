@@ -1,7 +1,6 @@
 import pytest
 from pytest_testrail.plugin import pytestrail
 from api.data.constants import ValidationNotice
-from api.fixtures.assertions import Assertions
 from api.fixtures.document_type.document_type import DocumentType
 
 

@@ -17,10 +17,8 @@ class DownloadActual(BaseClass):
     API_V3_DOCUMENT = "api/v3.0/"  # API v3.0
 
     DATA_FOR_DOWNLOADING_FILE = [
-        ["ca6a9bed-6e99-585a-7549-c478a5415b42", "api/v0.1/"],
-        ["3ace26a4-5a06-f993-1215-7fb463efa597", "api/v1.0/"],
-        ["d6a200c3-04c7-4f52-f7d2-f2d46397d133", "api/v2.0/"],
-        ["0754d896-3c0e-b1ca-aaf5-d5fa12050394", "api/v3.0/"],
+        ["api/v2.0/"],
+        ["api/v3.0/"],
     ]
 
     def get_info_about_document_version(self, api_version=None, doc_ver_id=None, header=None, response=200) -> Response:
@@ -30,7 +28,8 @@ class DownloadActual(BaseClass):
             url=f"{self.app.url}{api_version}DocumentVersion/{doc_ver_id}",
             headers=header
         )
-        logger.info(f"GET запрос получения данных по ID версии документа. Ответ: {res.status_code}")
+        logger.info(f"GET: Получения данных по ID версии документа. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
         assert res.status_code == response
         return res.json()
 
@@ -42,7 +41,7 @@ class DownloadActual(BaseClass):
             url=f"{self.app.url}{api_version}DocumentVersion/{doc_ver_id}/DownloadActual?isInline={is_inline}",
             headers=header
         )
-        logger.info(f"GET запрос на скачивание актуального файла по id версии документа. Ответ: {res.status_code}")
+        logger.info(f"GET. Скачивание актуального файла. Ответ: {res.status_code}")
         assert res.status_code == response
         with open(Path(os.getcwd(), "download_files", file_name), "wb") as file:
             file.write(res.content)

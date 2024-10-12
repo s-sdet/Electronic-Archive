@@ -39,16 +39,16 @@ class DocumentType(BaseClass):
     # 14: новый 1-й тип метаданных; 15: новое значение 1-го типа; 16: новый 2-й тип метаданных; 17: значение 2-го типа;
     DATA_FOR_CREATE_DOCUMENT_TYPE_WITH_TWO_TYPE_METADATA = [
         [file_type.file_type_name_latin, "DateTime", "ДатаВремя", "DateTime", "String", "Строковое регулярное почта",
-         "String", "regularExpression", "^[\S]+@[\S]+.[\S]+$", "новый", "DateTime", "2023-10-10", "String",
+         "String", "regularExpression", "^[\\S]+@[\\S]+.[\\S]+$", "новый", "DateTime", "2023-10-10", "String",
          "mail@mail.ru", "DateTime", "2024-03-10", "String", "livespece@akbars.ru"],
         [file_type.file_type_name_latin, "Boolean", "Булево", "Boolean", "Number", "Номер", "Number", None, None,
          "новый", "Number", 2024, None, None, "Number", 2024, "Boolean", True]
     ]
 
     @staticmethod
-    def data_to_create_document_type_with_metadata_type(doc_type_name=None, is_required=True, metadata_type_name=None,
-                                                        display_name=None, metadata_type=None, regular_expression=None,
-                                                        regular_expression_value=None):
+    def data_to_create_document_type_with_metadata_type(
+            doc_type_name=doc_type.doc_type_name_latin, is_required=True, metadata_type_name=None,
+            display_name=None, metadata_type=None, regular_expression=None, regular_expression_value=None):
         """
         Тело запроса для создания типа документа без типа файла с указанием обязательного типа метаданных.
         :param doc_type_name: Название типа документа;
@@ -73,7 +73,24 @@ class DocumentType(BaseClass):
         return data
 
     @staticmethod
-    def data_for_create_document_type_without_metadata_type(doc_type_name=None):
+    def doc_type_with_metadata_type_and_without_file_type_in_v3(
+            doc_type_name=doc_type.doc_type_name_latin, system_name="String", display_name="String", is_required=False,
+            value_type="String"):
+        """Тело запроса для создания типа документа с типом метаданных и без типа файла в API v3."""
+        data = {
+            "name": doc_type_name,
+            "properties": [{
+                "name": system_name,
+                "displayName": display_name,
+                "isRequired": is_required,
+                "valueType": value_type,
+            }],
+            "fileTypes": []
+        }
+        return data
+
+    @staticmethod
+    def data_for_create_document_type_without_metadata_type(doc_type_name=doc_type.doc_type_name_latin):
         """
         Тело запроса для создания типа документа без типа файла и типа метаданных.
         :param doc_type_name: Название типа документа;
@@ -86,23 +103,62 @@ class DocumentType(BaseClass):
         return data
 
     @staticmethod
-    def data_for_create_document_type_with_metadata(doc_type_name=None, system_file_name=None,
-                                                    allowed_extensions="allowedExtensions", extensions=None):
+    def data_for_create_document_type_without_property_types(doc_type_name=doc_type.doc_type_name_latin):
+        """
+        Тело запроса для создания типа документа без типа файла и типа метаданных.
+        :param doc_type_name: Название типа документа;
+        """
+        data = {
+            "name": doc_type_name,
+            "propertyTypes": [],
+            "fileTypes": []
+        }
+        return data
+
+    @staticmethod
+    def data_for_create_document_type_with_metadata(
+            doc_type_name=doc_type.doc_type_name_latin, system_file_name=file_type.file_type_name_latin,
+            allowed_extensions="allowedExtensions", extensions=None, is_required=False):
         """
         Тело запроса для создания типа документа без типа файла и типа метаданных.
         :param doc_type_name: Название типа документа;
         :param system_file_name: Системное название файла;
         :param allowed_extensions: Доступные расширения для файлов;
         :param extensions: Список доступных расширений для файлов;
+        :param is_required: Обязательность типа метаданных;
         """
         data = {
                 "name": doc_type_name,
                 "properties": [],
                 "fileTypes": [{
                     "name": system_file_name,
-                    allowed_extensions: extensions
+                    allowed_extensions: extensions,
+                    "isRequired": is_required
                 }]
             }
+        return data
+
+    @staticmethod
+    def document_type_without_metadata_and_with_file_type(
+            doc_type_name=doc_type.doc_type_name_latin, system_file_name=file_type.file_type_name_latin,
+            allowed_extensions="allowedExtensions", extensions='[".jpg", ".pdf", ".png"]', is_required=False):
+        """
+        Тело запроса для создания типа документа без типа файла и типа метаданных.
+        :param doc_type_name: Название типа документа;
+        :param system_file_name: Системное название файла;
+        :param allowed_extensions: Доступные расширения для файлов;
+        :param extensions: Список доступных расширений для файлов;
+        :param is_required: Обязательность типа метаданных;
+        """
+        data = {
+            "name": doc_type_name,
+            "propertyTypes": [],
+            "fileTypes": [{
+                "name": system_file_name,
+                allowed_extensions: extensions,
+                "isRequired": is_required
+            }]
+        }
         return data
 
     @staticmethod
@@ -143,15 +199,16 @@ class DocumentType(BaseClass):
             }
         return data
 
-    def get_document_type(self, header=None, key=None, type_response=200) -> Response:
-        """Получение типов документов по нескольким символам."""
+    def search_doc_type_by_name(self, header=None, key=None, code_response=200) -> Response:
+        """Поиск типов документов по названию или нескольким символам."""
         res = request(
             method="GET",
             url=f"{self.app.url}{self.URL_DOCUMENT_TYPE.format(key)}",
             headers=header
         )
-        logger.info(f"GET Document Type. Status code: {res.status_code}")
-        assert res.status_code == type_response
+        logger.info(f"GET: Поиск типа документа по названию. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
+        assert res.status_code == code_response
         return res.json()
 
     def get_info(self, url_api=None, url=None, folder_id=None, header=None, response=200) -> Response:
@@ -192,6 +249,41 @@ class DocumentType(BaseClass):
         logger.info(f"POST: Создание типа документа. Ответ: {res.status_code}")
         logger.info(f"JSON: {res.json()}")
         assert res.status_code == response
+        return res.json()
+
+    def del_doc_type(self, url_api="api/v4.0/", url="DocumentType", type_id=None, header=None, data=None,
+                     response=200) -> Response:
+        """
+        Удалить тип документа.
+        :param url_api: URL версии API;
+        :param url: URL;
+        :param type_id: ID типа документа;
+        :param header: Токен авторизации;
+        :param data: Тело запроса;
+        :param response: Ожидаемый ответ сервера;
+        """
+        res = request(
+            method="DELETE",
+            url=f"{self.app.url}{url_api}{url}/{type_id}",
+            headers=header,
+            json=data
+        )
+        logger.info(f"POST: Удаление типа документа. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
+        assert res.status_code == response
+        return res.json()
+
+    def get_file_type_id(self, url_api="api/v4.0/", url="DocumentType/", doc_type_id=None, header=None,
+                         code_response=200) -> Response:
+        """Получение ID типа файла по ID типа документа."""
+        res = request(
+            method="GET",
+            url=f"{self.app.url}{url_api}{url}{doc_type_id}",
+            headers=header
+        )
+        logger.info(f"GET: Получение типа документа. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
+        assert res.status_code == code_response
         return res.json()
 
     def update_data(self, url_api=None, url="DocumentType", header=None, data=None, response=200) -> Response:

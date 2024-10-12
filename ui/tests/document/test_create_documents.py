@@ -2,12 +2,12 @@ import pytest
 from pytest_testrail.plugin import pytestrail
 from ui.data.constants import DocumentNotice
 from ui.fixtures.pages.document.documents import DocumentsPage
+from ui.fixtures.pages.document.filtration.filtration import FiltrationPage
 
 
 class TestCreateDocuments:
     """
-    Тесты для создания документов
-    https://electronicarchive-frontend-afds.dev.akbars.ru/document/create
+    Тесты для создания документов***
     """
 
     def test_create_document(self, app, login_user, random_document_data):
@@ -43,43 +43,30 @@ class TestCreateDocuments:
 
     @pytest.mark.lp
     @pytestrail.case("C19119785")
-    def test_create_document_with_file_and_metadata(self, app, login_user, random_document_data):
+    def test_create_document_with_file_and_metadata(self, app, create_document_with_pdf_file):
         """Тест сохранения документа и его версии с файлом и метаданными."""
-        app.document.open_form_to_create_document()
-        app.document.data_entry_to_create_document(
-            doc_type=DocumentsPage.SELECT_DOCUMENT_TYPE_WITH_DIFFERENT_EXTENSIONS, document_data=random_document_data)
-        app.document.selection_file_type(type_name=DocumentsPage.FILE_TYPE_DIFFERENT_EXTENSIONS)
-        app.document.add_file_for_document(file_name="upload_file.pdf")
-        app.document.document_create()
-
-        # После создания документа выполняется его поиск с нужным типом документа(с которым был создан)
-        app.document.add_document_type(
-            document_type=DocumentsPage.SELECT_DOCUMENT_TYPE_WITH_DIFFERENT_EXTENSIONS,
-            document_type_locator=DocumentsPage.SELECT_DOCUMENT_TYPE_WITH_DIFFERENT_EXTENSIONS,
-            document_type_name=DocumentNotice.DOCUMENT_TYPE_WITH_DIFFERENT_EXTENSIONS)
-        app.document.data_entry_for_search_document(locator=DocumentsPage.LOCATORS_METADATA_TO_SEARCH_DOCUMENT["5"],
-                                                    document_data=random_document_data)
-        app.document.document_search()
-        app.document.assertion_document_found(document_data=random_document_data)
+        app.filter.search_document_by_metadata(locator=FiltrationPage.FIELDS_FOR_SEARCH_DOCUMENT["OKZ_NUMBER"],
+                                               document_data=create_document_with_pdf_file)
+        app.document.assertion_document_found(locator=FiltrationPage.DATA_IN_SEARCH_RESULT["OKZ_NUMBER"],
+                                              document_data=create_document_with_pdf_file)
+        app.document.assertion_document_type_found(locator=FiltrationPage.DATA_IN_SEARCH_RESULT["DOC_TYPE"],
+                                                   document_type=DocumentNotice.DOCUMENT_TYPE_EA_123)
 
     @pytest.mark.lp
     @pytestrail.case("C19119794")
-    def test_create_document_with_file_and_additional_metadata(self, app, login_user, random_document_data):
+    def test_create_document_with_file_and_additional_metadata(self, app, create_document_with_different_extensions):
         """Тест сохранения документа и его версии с файлом, метаданными и дополнительными метаданными."""
-        app.document.open_form_to_create_document()
-        app.document.data_entry_to_create_document(
-            doc_type=DocumentsPage.SELECT_DOCUMENT_TYPE_WITH_DIFFERENT_EXTENSIONS, document_data=random_document_data)
-        app.document.selection_file_type(type_name=DocumentsPage.FILE_TYPE_DIFFERENT_EXTENSIONS)
-        app.document.additional_metadata_entry_to_create_document()
-        app.document.add_file_for_document(file_name="upload_file.pdf")
-        app.document.document_create()
+        app.filter.search_document_by_metadata(locator=FiltrationPage.FIELDS_FOR_SEARCH_DOCUMENT["OKZ_NUMBER"],
+                                               document_data=create_document_with_different_extensions)
+        app.document.assertion_document_found(locator=FiltrationPage.DATA_IN_SEARCH_RESULT["OKZ_NUMBER"],
+                                              document_data=create_document_with_different_extensions)
+        app.document.assertion_document_type_found(locator=FiltrationPage.DATA_IN_SEARCH_RESULT["DOC_TYPE"],
+                                                   document_type=DocumentNotice.DOCUMENT_TYPE_WITH_DIFFERENT_EXTENSIONS)
 
-        # После создания документа выполняется его поиск с нужным типом документа(с которым был создан)
-        app.document.add_document_type(
-            document_type=DocumentsPage.SELECT_DOCUMENT_TYPE_WITH_DIFFERENT_EXTENSIONS,
-            document_type_locator=DocumentsPage.SELECT_DOCUMENT_TYPE_WITH_DIFFERENT_EXTENSIONS,
-            document_type_name=DocumentNotice.DOCUMENT_TYPE_WITH_DIFFERENT_EXTENSIONS)
-        app.document.data_entry_for_search_document(locator=DocumentsPage.LOCATORS_METADATA_TO_SEARCH_DOCUMENT["5"],
-                                                    document_data=random_document_data)
-        app.document.document_search()
-        app.document.assertion_document_found(document_data=random_document_data)
+    @pytestrail.case("C14968869")
+    def test_assertion_document_creation_date(self, app, create_document_with_all_fields, document_creation_date):
+        """Тест проверки даты создания документа."""
+        app.filter.search_document_by_metadata(locator=FiltrationPage.FIELDS_FOR_SEARCH_DOCUMENT["OKZ_NUMBER"],
+                                               document_data=create_document_with_all_fields)
+        app.document.get_document_modification_date()
+        assert app.document.get_document_modification_date() == document_creation_date

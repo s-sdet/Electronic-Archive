@@ -7,7 +7,7 @@ logger = logging.getLogger("Electronic Archive")
 
 
 class CreatePrecondition(BasePage):
-    """Страницы https://electronicarchive-frontend-afds.dev.akbars.ru/ для создания сущностей перед прогоном тестов."""
+    """Страницы *** для создания сущностей перед прогоном тестов."""
 
     # Ссылки
     LINK_USER_IN_TAB = (By.XPATH, "//div[@class='sc-bHdvGS ggKXFZ']")  # Ссылка на профиль в верхнем меню
@@ -45,7 +45,7 @@ class CreatePrecondition(BasePage):
     def open_form_doc_type_create(self):
         """Открытие формы создания типа документа."""
         # Проверка перехода в панель администрирования
-        self.element_is_enabled(locator=self.ELEMENT_TO_WAIT_PAGE_TO_LOAD)  # Ожидание загрузки страницы
+        self.element_is_enabled(locator=self.TITLE_ADMIN_PANEL)  # Ожидание загрузки страницы
         assert self.get_text(locator=self.TITLE_ADMIN_PANEL) == DocumentsTypeNotice.TITLE_ADMIN_PANEL
 
         self.click(locator=self.BUTTON_CREATE)  # Клик по кнопке "Создать"

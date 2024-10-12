@@ -18,6 +18,7 @@ class ActualVersion(BaseClass):
             headers=header,
             json=data
         )
-        logger.info(f"GET Actual Version. Status code: {res.status_code}")
+        logger.info(f"GET: Получение актуальной версии. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
         assert res.status_code == type_response
         return res.json()

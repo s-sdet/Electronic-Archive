@@ -7,6 +7,7 @@ from datetime import date
 from selenium.webdriver.common.by import By
 from ui.fixtures.pages.base_page import BasePage
 from ui.data.constants import DocumentNotice
+from ui.fixtures.pages.document.filtration.filtration import FiltrationPage
 
 logger = logging.getLogger("Electronic Archive")
 
@@ -50,7 +51,7 @@ def deleting_png_files(directory):
 
 
 class DocumentsPage(BasePage):
-    """Страница поиска документов https://electronicarchive-frontend-afds.dev.akbars.ru/document/search"""
+    """Страница поиска документов ***"""
 
     # Папки типов документов
     FOLDER_DOCUMENT_TYPE_EA = (By.XPATH, "//div[text()='ЭА']")
@@ -73,7 +74,8 @@ class DocumentsPage(BasePage):
     BUTTON_CREATE = (By.XPATH, "//span[contains(text(), 'Создать документ')]")  # Создать документ
     BUTTON_SELECT = (By.XPATH, "//span[contains(text(), 'Выбрать')]")  # Выбрать
     BUTTON_SEARCH = (By.XPATH, "//span[contains(text(), 'Найти')]")  # Найти
-    BUTTON_ACTIONS = (By.XPATH, "//div[@class='sc-hNDKOd iAUITB']/button")  # Действия
+    BUTTON_APPLY = (By.XPATH, "//span[contains(text(), 'Применить')]")  # Применить
+    BUTTON_ACTIONS = (By.XPATH, "//span[contains(text(), 'Действия')]")  # Действия
     BUTTON_DOCUMENT_VERSION_ACTUAL = (By.XPATH, "//li[contains(text(), 'Сделать версию документа актуальной')]")
     BUTTON_UPLOAD = (By.XPATH, "//button[@data-testid='save-btn']")  # Загрузить
     BUTTON_DELETE = (By.XPATH, "//span[contains(text(), 'Удалить')]")  # Удалить
@@ -82,8 +84,8 @@ class DocumentsPage(BasePage):
     BUTTON_ADD_DOCUMENT_TYPE = (By.XPATH, "//span[contains(text(), 'Добавить тип документа')]")  # Добавить тип док-та
     BUTTON_FILE_UPLOAD = (By.XPATH, "//span[contains(text(), 'Нажмите для загрузки файлов')]")  # Добавить файл
     BUTTON_CONFIRM = (By.XPATH, "//span[contains(text(), 'Подтвердить')]")  # Подтвердить
-    BUTTON_DOWNLOAD_FILE = (By.XPATH, "//div[@class='sc-hNDKOd iAUITB']//button")  # Скачать файл документа
-    BUTTON_NEXT_PAGE = (By.XPATH, "//button[@title='Следующая страница']")  # Следущая страница
+    BUTTON_DOWNLOAD_FILE = (By.XPATH, "//div[@class='sc-iMWBiJ XMnOh']//button")  # Скачать файл документа
+    BUTTON_NEXT_PAGE = (By.XPATH, "//button[@aria-label='Перейти на следующую страницу']")  # Следующая страница
 
     # Выпадающие списки
     DROPDOWN_DOCUMENT_VERSION = (By.XPATH, "//div[contains(text(), 'актуальная')]")  # Выбор версии документа
@@ -92,8 +94,9 @@ class DocumentsPage(BasePage):
     DROPDOWN_FILE = (By.XPATH, "//div[contains(text(), 'upload_file')]")  # Выбор файла в режиме просмотра документа
 
     # Ссылки
-    LINK_DOCUMENT = (By.XPATH, "//tbody[@class='MuiTableBody-root']//a")  # Ссылка на редактируемый документ
+    LINK_DOCUMENT = (By.XPATH, "//tbody[@class='TableBody']//td[2]/a")  # Ссылка на редактируемый документ
     LINK_SEARCH_DOCUMENT = (By.XPATH, "//div[@id='root']//nav/div[2]/div")  # Ссылка на поиск документов
+    LINK_CREATE_DOCUMENT = (By.XPATH, "//div[@id='root']//nav/div[2]/div[3]")  # Ссылка на создание документов
     LINK_MAKE_FILE_UP_TO_DATE = (By.XPATH, "//li[contains(text(), 'Сделать файл актуальным')]")
     LINK_MAKE_FILE_IRRELEVANT = (By.XPATH, "//li[contains(text(), 'Убрать актуальность файла')]")
     LINK_UPLOAD_FILE = (By.XPATH, "//li[contains(text(), 'Загрузить файл')]")
@@ -103,10 +106,11 @@ class DocumentsPage(BasePage):
     TITLE_DOCUMENT_TYPE_SELECTION_WINDOW = (By.XPATH, "//div[@class='Dialog-Header']/h4")  # Заголовок окна выбора типа
     # типа документа
     TITLE_DOCUMENT = (By.XPATH, "//div[@class='sc-dmyDGi dMGFLb']/h2")  # Заголовок редактируемого документа
-    TITLE_METADATA_AND_VALUES = (By.XPATH, "//div[contains(text(), 'Метаданные и значения')]")  # Заголовок метаданных
-    TITLE_METADATA_EDITING = (By.XPATH, "//div[@class='sc-csKIKE iFKuVk']")  # Заголовок окна редактирования документа
-    TITLE_CREATE_DOCUMENT = (By.XPATH, "//h2[@class='sc-guDLRT bRDCyB']")  # Заголовок формы создания документа
-    TITLE_UPLOAD_FILE = (By.XPATH, "//div[contains(text(), 'Загрузка файла')]")  # Заголовок формы загрузки файла
+    TITLE_METADATA_AND_VALUES = (By.XPATH, "//div[contains(text(), 'Метаданные и значения')]")
+    TITLE_METADATA_EDITING = (By.XPATH, "//div[contains(text(), 'Редактирование метаданных')]")
+    TITLE_NAME_EDITING = (By.XPATH, "//h2[contains(text(), 'Редактирование название документа')]")
+    TITLE_CREATE_DOCUMENT = (By.XPATH, "//h2[@class='sc-gEvEer DudLf']")  # Заголовок формы создания документа
+    TITLE_UPLOAD_FILE = (By.XPATH, "//div[contains(text(), 'Загрузка файла')]")
 
     # Вкладки меню в режиме просмотра документа
     ELECTRONIC_SIGNATURE = (By.XPATH, "//span[contains(text(), 'Подписание ЭП')]")  # Подписание ЭП
@@ -116,42 +120,45 @@ class DocumentsPage(BasePage):
 
     SEARCH_RESULT = (By.XPATH, "//h2[contains(text(), 'Результат поиска')]")  # Заголовок окна результатов поиска
     EDIT_METADATA = (By.XPATH, "//li[contains(text(), 'Редактировать метаданные')]")  # Редактировать метаданные
+    EDIT_NAME = (By.XPATH, "//li[contains(text(), 'Изменить название документа')]")  # Редактировать название
     METADATA_AND_VALUES = (By.XPATH, "//div[text()='Метаданные и значения']//following::div/div/div[2]")  # Номер док-та
     SELECT_FIELD_DOCUMENT_TYPE = (By.XPATH, "//div[text()='Загрузка файлов']//following::div//input")  # Поле "Тип док."
     SUCCESS_DOCUMENT_CREATE = (By.XPATH, "//div[@class='MuiCollapse-wrapperInner']")  # Уведомление о создании
 
     INPUT_FILE_UPLOAD = (By.XPATH, "//input[@data-testid='file-input']")
-    FILE_NAME_IN_DOCUMENT = (By.XPATH, "//span[@class='sc-iLXwop iAgTML']")
+    INPUT_DOCUMENT_NAME = (By.XPATH, "//input[@name='name']")  # Поле названия документа
+    FILE_NAME_IN_DOCUMENT = (By.XPATH, "//span[@class='sc-fHjqPf jfVBbF']")
     FILE_NAMES_IN_DOCUMENT = {
         1: (By.XPATH, "//ul[@class='sc-jiaTdC dCEwQM']/li[1]//span"),
         2: (By.XPATH, "//ul[@class='sc-jiaTdC dCEwQM']/li[2]//span"),
         3: (By.XPATH, "//ul[@class='sc-jiaTdC dCEwQM']/li[3]//span"),
         4: (By.XPATH, "//ul[@class='sc-jiaTdC dCEwQM']/li[4]//span")
     }
-    FILE_RELEVANCE_STATUS = (By.XPATH, "//div[@class='sc-hNDKOd iAUITB']/div/div[2]")
-    ERROR_REQUIRED_FIELD = (By.XPATH, "//form[@class='sc-dQmhJc bBHdrE']//div[2]//p")  # Уведомление обязательное поле
+    FILE_RELEVANCE_STATUS = (By.XPATH, "//div[@class='sc-iMWBiJ XMnOh']/div/div[2]")  # Статус актуальности файла
+    ERROR_REQUIRED_FIELD = (By.XPATH, "//p[contains(text(), 'Обязательное поле')]")  # Уведомление обязательное поле
+    ERROR_EMPTY_DOCUMENT_TITLE = (By.XPATH, "//div[@class='Dialog-Body']/div/div")  # Поле обязательно для заполнения
     CHECKBOX_ONLY_SIGNED_DOCUMENTS = (By.NAME, "isSigned")  # Чекбокс "Только подписанные" для поиска документов
     STATUS_ELECTRONIC_SIGNATURE = (By.XPATH, "//span[text()='Подписан']")  # Статус ЭП
     AVAILABLE_EXTENSIONS = (By.XPATH, "//div[contains(text(), 'Доступные расширения')]")  # Предупреждение формата файла
     DOCUMENT_PREVIEW = (By.XPATH, "//img[@alt='Документ']")  # Превью документа
     PDF_DOCUMENT_PREVIEW = (By.XPATH, "//canvas[@class='react-pdf__Page__canvas']")  # Превью PDF документа
     LINES_PER_PAGE = (By.XPATH, "//p[text()='Строк на странице:']")  # Строк на странице
-    WAITING_FOR_SEARCH_RESULT = (By.XPATH, "//tbody[@class='MuiTableBody-root']/tr/td[2]/span/a")  # Таблица результатов
-    CHECKBOX_SELECT_20_DOCUMENTS = (By.XPATH, "//span[@data-testid='checkbox']/span")  # Выбор 20 документов
+    WAITING_FOR_SEARCH_RESULT = (By.XPATH, "//tbody[@class='TableBody']/tr/td[2]/a")  # Таблица результатов
+    CHECKBOX_SELECT_20_DOCUMENTS = (By.XPATH, "//tr[@class='TableRow']/th[1]//span")  # Выбор 20 документов
     FAILURE_DOWNLOAD_MORE_20_DOCUMENTS = (
         By.XPATH, "//span[text()='Превышено допустимое количество документов (20) для загрузки']")  # Текст ошибки
     FILE_NAME_WHEN_VIEWING_DOCUMENT = (By.XPATH, f"//li[contains(text(), )]")  # Выбор файла в документе
 
     # Поля метаданных в режиме редактирования документа
     LOCATORS_METADATA = {
-        "APPLICATION_NUMBER": (By.XPATH, "//div[@class='sc-crHGWd jETAME']//div[1]//input"),
-        "ACCOUNT_NUMBER":     (By.XPATH, "//div[@class='sc-crHGWd jETAME']//div[2]//input"),
-        "REFERENCE_NUMBER":   (By.XPATH, "//div[@class='sc-crHGWd jETAME']//div[3]//input"),
-        "CONTRACT_NUMBER":    (By.XPATH, "//div[@class='sc-crHGWd jETAME']//div[4]//input"),
-        "CLIENT_ID_NUMBER":   (By.XPATH, "//div[@class='sc-crHGWd jETAME']//div[5]//input"),
-        "CARD_ID_NUMBER":     (By.XPATH, "//div[@class='sc-crHGWd jETAME']//div[6]//input"),
-        "ADDITIONAL_FIELD":   (By.XPATH, "//div[@class='sc-crHGWd jETAME']//div[7]//input"),
-        "DIRECTORY":          (By.XPATH, "//div[@class='sc-crHGWd jETAME']//div[8]//input")
+        "APPLICATION_NUMBER": (By.NAME, "okzRequestNumber"),
+        "ACCOUNT_NUMBER":     (By.NAME, "accountNumber"),
+        "REFERENCE_NUMBER":   (By.NAME, "applicationId"),
+        "CONTRACT_NUMBER":    (By.NAME, "creditContractNumber"),
+        "CLIENT_ID_NUMBER":   (By.NAME, "crmClientId"),
+        "CARD_ID_NUMBER":     (By.NAME, "debitCardNumber"),
+        "ADDITIONAL_FIELD":   (By.NAME, "documentProperties.Справочник для тестирования"),
+        "DIRECTORY":          (By.NAME, "documentProperties.Дополнительное поле")
     }
 
     # Поля метаданных в режиме создания документа
@@ -173,12 +180,12 @@ class DocumentsPage(BasePage):
 
     # Поля метаданных в режиме поиска документа.
     LOCATORS_METADATA_TO_SEARCH_DOCUMENT = {
-        "5":    (By.XPATH, "//form[@class='sc-brSaZW iUjnAz']/div[2]/div/div[1]//input"),  # Номер заявки
-        "6":    (By.XPATH, "//form[@class='sc-brSaZW iUjnAz']/div[2]/div/div[2]//input"),  # Номер счета
-        "7":    (By.XPATH, "//form[@class='sc-brSaZW iUjnAz']/div[2]/div/div[3]//input"),  # Номер обращения
-        "8":    (By.XPATH, "//form[@class='sc-brSaZW iUjnAz']/div[2]/div/div[4]//input"),  # Номер договора
-        "9":    (By.XPATH, "//form[@class='sc-brSaZW iUjnAz']/div[2]/div/div[5]//input"),  # ID клиента CRM
-        "10":   (By.XPATH, "//form[@class='sc-brSaZW iUjnAz']/div[2]/div/div[6]//input")   # ID дебетовой карты
+        "5":    (By.XPATH, "//form[@class='sc-jEACwC lflGMN']/div[2]/div/div[1]//input"),  # Номер заявки
+        "6":    (By.XPATH, "//form[@class='sc-jEACwC lflGMN']/div[2]/div/div[2]//input"),  # Номер счета
+        "7":    (By.XPATH, "//form[@class='sc-jEACwC lflGMN']/div[2]/div/div[3]//input"),  # Номер обращения
+        "8":    (By.XPATH, "//form[@class='sc-jEACwC lflGMN']/div[2]/div/div[4]//input"),  # Номер договора
+        "9":    (By.XPATH, "//form[@class='sc-jEACwC lflGMN']/div[2]/div/div[5]//input"),  # ID клиента CRM
+        "10":   (By.XPATH, "//form[@class='sc-jEACwC lflGMN']/div[2]/div/div[6]//input")   # ID дебетовой карты
     }
 
     # Данные документов в результатах поиска
@@ -186,10 +193,32 @@ class DocumentsPage(BasePage):
         "DATE": (By.XPATH, "//tbody[@class='MuiTableBody-root']/tr/td[3]")  # Дата изменения документа
     }
 
+    # Данные для параметризации валидации поля "№ заявки в АС ОКЗ"
+    DATA_FOR_VALIDATION_APPLICATION_NUMBER = [
+        ["21412412476124712467216478126487126478126487126487126487126412421", "Переданы некорректные параметры запроса"]
+    ]
+
+    # Данные для параметризации валидации поля название документа в режиме редактирования
+    DATA_FOR_INVALID_DOCUMENT_NAME = [
+        ["", "Поле обязательно для заполнения"],
+        ["Новое название документа более 64 символов для валидации названия", "Максимальная длина 64 символа"]
+    ]
+
+    # Данные для параметризации валидации поля название документа в режиме редактирования
+    DATA_FOR_VALIDATION_DOCUMENT_NAME = [
+        ["Новое название для тестового документа", False],
+        ["Новое название для тестового документа", True],
+    ]
+
     def go_to_doc_search(self):
         """Переход в раздел поиска документов"""
         self.element_is_enabled(locator=self.LINK_SEARCH_DOCUMENT)  # Ожидание элемента
         self.click(locator=self.LINK_SEARCH_DOCUMENT)
+
+    def go_to_doc_create(self):
+        """Переход в раздел создания документов"""
+        self.element_is_enabled(locator=self.LINK_CREATE_DOCUMENT)  # Ожидание элемента
+        self.click(locator=self.LINK_CREATE_DOCUMENT)
 
     def add_file_for_document(self, file_name):
         """
@@ -265,14 +294,6 @@ class DocumentsPage(BasePage):
         self.element_is_enabled(locator=self.BUTTON_DELETE)  # Ожидание, что кнопка стала активна
         self.click(locator=self.BUTTON_DELETE)  # Подтверждение удаления файла
 
-    def data_entry_for_search_document(self, locator, document_data):
-        """
-        Ввод данных в поля поиска документа.
-        :param locator: Локатор поля для поиска документа.
-        :param document_data: Принимает сгенерированное значение из фикстуры создания документа.
-        """
-        self.send_keys(locator=locator, value=document_data)  # Ввод значения в поля для поиска документа
-
     def add_document_type(self, document_type, document_type_locator, document_type_name):
         """
         Добавление типа документа для поиска;
@@ -296,16 +317,6 @@ class DocumentsPage(BasePage):
         self.element_is_enabled(locator=self.TITLE_CREATE_DOCUMENT)  # Ожидание элемента
         logger.info(f"Заголовок окна: {self.get_text(locator=self.TITLE_CREATE_DOCUMENT)}")
         assert self.get_text(locator=self.TITLE_CREATE_DOCUMENT) == DocumentNotice.TITLE_CREATE_DOCUMENT
-
-    def selection_document_type(self, type_name):
-        """
-        Выбор типа документа.
-        :param type_name: Имя типа документа.
-        """
-        self.click(locator=self.SELECT_FIELD_DOCUMENT_TYPE)  # Клик по полю "Тип документа"
-        self.assertion_window_opening()
-        self.click(locator=type_name)  # Выбор типа документа из списка
-        self.click(locator=self.BUTTON_SELECT)  # Клик по кнопке "Выбрать"
 
     def selection_document_type_in_folder(self, folder_name, type_name):
         """
@@ -377,42 +388,17 @@ class DocumentsPage(BasePage):
         # Проверка появления предупреждения, что поле не заполнено
         assert self.get_text(locator=locator_error_required_field) == DocumentNotice.ERROR_REQUIRED_FIELD
 
-    def data_entry_and_search_document(self, document_data):
-        """
-        Ввод данных в поля для поиска документа.
-        Цикл проходит по всем полям по которым можно найти документ, проверяя корректность данных документа.
-        :param document_data: Принимает возвращаемые генерируемые данные из фикстуры создания документа.
-        """
-        for num, locator in self.LOCATORS_METADATA_TO_SEARCH_DOCUMENT.items():
-            self.send_keys(locator=locator, value=document_data)  # Ввод значения в поля для поиска документа
-            self.document_search()
-
-            # Проверяем, что значения полей найденного документа равны значениям при создании документа
-            self.element_is_enabled(locator=self.LINES_PER_PAGE)  # Ожидание загрузки страницы
-            assert self.get_text(locator=(By.XPATH, f"//tbody[@class='MuiTableBody-root']//td[{num}]")) == document_data
-            self.click(locator=self.LINK_SEARCH_DOCUMENT)  # Переход/возврат в форму поиска документов
-
-    def select_only_signed_documents(self):
-        """Перевод бегунка для поиска только подписанных документов"""
-        self.click(locator=self.CHECKBOX_ONLY_SIGNED_DOCUMENTS)  # Клик по чекбоксу "Только подписанные" в поиске
-
     def document_search(self):
         """Поиск документа с уже выбранным типом документа."""
-        self.element_is_enabled(locator=self.BUTTON_SEARCH)  # Ожидание элемента
-        self.click(locator=self.BUTTON_SEARCH)  # Клик по кнопке "Найти" для поиска документов
+        self.element_is_enabled(locator=self.BUTTON_APPLY)  # Ожидание элемента
+        self.click(locator=self.BUTTON_APPLY)  # Клик по кнопке "Применить" для поиска документов
         self.assertion_go_to_search_page()
 
     def document_open(self):
         """Открытие найденного документа для редактирования."""
         self.element_is_enabled(locator=self.LINK_DOCUMENT)  # Ожидание элемента
-        self.click(locator=self.LINK_DOCUMENT)  # Клик по ссылке на документ для открытия
-        self.assertion_document_opened_for_viewing()
-
-    def open_document(self):
-        """Открытие выбранного документа для редактирования."""
-        self.document_search()
-        self.element_is_enabled(locator=self.LINK_DOCUMENT)  # Ожидание элемента
-        self.click(locator=self.LINK_DOCUMENT)  # Клик по ссылке на документ для открытия
+        logger.info(f"Название документа: {self.get_text(locator=self.LINK_DOCUMENT)}")
+        self.click(locator=self.LINK_DOCUMENT)  # Клик по названию документа для открытия
         self.assertion_document_opened_for_viewing()
 
     def assertion_display_of_4_files_previews(self):
@@ -482,8 +468,34 @@ class DocumentsPage(BasePage):
         self.element_is_enabled(locator=self.DATE_FIELD)  # Ожидание появления элемента
         self.send_keys(locator=self.DATE_FIELD, value=datetime.datetime.now().strftime('%d.%m.%Y'))
 
+    def add_application_number(self, application_number: str):
+        """
+        Метод добавления данных в поля "№ заявки в АС ОКЗ" в редактируемого документа.
+        :param application_number: № заявки в АС ОКЗ;
+        """
+        self.element_is_enabled(locator=self.LOCATORS_METADATA["APPLICATION_NUMBER"])  # Ожидание появления элемента
+        self.send_keys(locator=self.LOCATORS_METADATA["APPLICATION_NUMBER"], value=application_number)
+
+    def rename_document(self, new_name: str):
+        """
+        Переименование документа.
+        :param new_name: Новое название документа;
+        """
+        self.element_is_enabled(locator=self.BUTTON_ACTIONS)  # Ожидание появления элемента
+        self.click(locator=self.BUTTON_ACTIONS)  # Клик по кнопке "Действие"
+        self.element_is_enabled(locator=self.EDIT_NAME)  # Ожидание появления элемента
+        self.click(locator=self.EDIT_NAME)  # Клик в выпадающем меню "Изменить название документа"
+
+        # Проверка, что документ открылся для редактирования
+        self.element_is_enabled(locator=self.TITLE_NAME_EDITING)  # Ожидание появления элемента
+        logger.info(f"Заголовок окна: {self.get_text(locator=self.TITLE_NAME_EDITING)}")
+        assert self.get_text(locator=self.TITLE_NAME_EDITING) == DocumentNotice.TITLE_NAME_EDITING
+
+        self.clear_by_deletion(locator=self.INPUT_DOCUMENT_NAME)
+        self.send_keys(locator=self.INPUT_DOCUMENT_NAME, value=new_name)
+
     def save_document(self):
-        """Сохранения документа после редактирования."""
+        """Сохранение документа после редактирования."""
         self.element_is_enabled(locator=self.BUTTON_SAVE)  # Ожидание появления элемента
         self.click(locator=self.BUTTON_SAVE)  # Клик по кнопке "Сохранить"
         self.assertion_document_opened_for_viewing()  # Проверка, что открылся документ после сохранения
@@ -517,11 +529,6 @@ class DocumentsPage(BasePage):
         self.click(locator=locator_button_dropdown_menu)  # Выбор пункта в выпадающем меню
         self.click(locator=self.BUTTON_CONFIRM)  # Клик по кнопке "Подтвердить"
 
-        # Проверка, что файл в статусе актуальный
-        # time.sleep(0.5)
-        # self.element_is_enabled(locator=self.DOCUMENT_PREVIEW)  # Ожидание загрузки страницы
-        # assert DocumentNotice.STATUS_FILE_ACTUAL in self.get_text(locator=self.FILE_RELEVANCE_STATUS)
-
     def assertion_file_is_up_to_date(self):
         """Проверка, что файл в статусе актуальный."""
         time.sleep(0.5)
@@ -553,9 +560,9 @@ class DocumentsPage(BasePage):
 
     def get_document_modification_date(self):
         """Получение даты создания или изменения документа."""
-        self.element_is_enabled(locator=self.LOCATORS_DOCUMENTS_DATA['DATE'])  # Ожидание элемента
-        modification_date = self.get_text(locator=self.LOCATORS_DOCUMENTS_DATA['DATE'])
-        logger.info(f"Дата изменения документа: {self.get_text(locator=self.LOCATORS_DOCUMENTS_DATA['DATE'])}")
+        self.element_is_enabled(locator=FiltrationPage.DATA_IN_SEARCH_RESULT['DATE'])  # Ожидание элемента
+        modification_date = self.get_text(locator=FiltrationPage.DATA_IN_SEARCH_RESULT['DATE'])
+        logger.info(f"Дата изменения: {self.get_text(locator=FiltrationPage.DATA_IN_SEARCH_RESULT['DATE'])}")
         return modification_date
 
     def assertion_window_opening(self):
@@ -598,13 +605,25 @@ class DocumentsPage(BasePage):
         # Проверка, что данные сохранились после редактирования
         assert self.get_text(locator=self.METADATA_AND_VALUES) == document_data
 
-    def assertion_document_found(self, document_data):
+    def assertion_document_found(self, locator, document_data):
         """
         Проверка, что найденный документ соответствует искомому.
-        :param document_data: Номер заявки документа
+        :param locator: Локатор искомого элемента;
+        :param document_data: Номер заявки документа;
         """
-        self.element_is_enabled(locator=(By.XPATH, "//tbody[@class='MuiTableBody-root']//td[5]/span"))  # Ожидание
-        assert self.get_text(locator=(By.XPATH, "//tbody[@class='MuiTableBody-root']//td[5]/span")) == document_data
+        self.element_is_enabled(locator=locator)  # Ожидание
+        logger.info(f"Название элемента: {self.get_text(locator=locator)}")
+        assert self.get_text(locator=locator) == document_data
+
+    def assertion_document_type_found(self, locator, document_type):
+        """
+        Проверка, что тип документа в найденном документе соответствует искомому.
+        :param locator: Локатор искомого элемента;
+        :param document_type: Тип документа;
+        """
+        self.element_is_enabled(locator=locator)  # Ожидание
+        logger.info(f"Название элемента: {self.get_text(locator=locator)}")
+        assert self.get_text(locator=locator) == document_type
 
     def assertion_display_preview_file(self):
         """Проверка отображения превью файла в режиме просмотра документа."""
@@ -612,3 +631,23 @@ class DocumentsPage(BasePage):
         self.element_is_enabled(locator=self.DOCUMENT_PREVIEW)  # Ожидание загрузки страницы
         logger.info(f"Атрибут превью файла: {self.get_attribute(locator=self.DOCUMENT_PREVIEW, attribute='alt')}")
         assert self.get_attribute(locator=self.DOCUMENT_PREVIEW, attribute="alt") == "Документ"
+
+    def assertion_document_save(self, notice: str):
+        """
+        Проверка сохранения документа.
+        :param notice: Текст ошибки.
+        """
+        # Проверка появления уведомления об успешном создании документа
+        self.element_is_enabled(locator=self.SUCCESS_DOCUMENT_CREATE)  # Ожидание появления элемента
+        logger.info(f"Текст всплывашки: {self.get_text(locator=self.SUCCESS_DOCUMENT_CREATE)}")
+        assert self.get_text(locator=self.SUCCESS_DOCUMENT_CREATE) == notice
+
+    def assertion_document_is_not_save(self, notice: str):
+        """
+        Проверка, что документ не сохранился.
+        :param notice: Текст ошибки.
+        """
+        # Проверка появления уведомления о не успешном сохранении документа после редактирования
+        self.element_is_enabled(locator=self.ERROR_EMPTY_DOCUMENT_TITLE)  # Ожидание появления элемента
+        logger.info(f"Текст ошибки: {self.get_text(locator=self.ERROR_EMPTY_DOCUMENT_TITLE)}")
+        assert self.get_text(locator=self.ERROR_EMPTY_DOCUMENT_TITLE) == notice

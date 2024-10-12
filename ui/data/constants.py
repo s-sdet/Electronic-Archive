@@ -2,7 +2,7 @@
 
 
 class LoginNotice:
-    """Страница авторизации https://electronicarchive-frontend-afds.akbars.ru/"""
+    """Страница авторизации ***"""
     LOGIN_FORM_TEXT = "Авторизация"  # Заголовок формы авторизации
     URL_DOCUMENT_SEARCH = "{}document/search"  # Раздел Поиск документов
     URL_ENTITIES_SEARCH = "{}entities/search"  # Раздел Сущности
@@ -11,23 +11,27 @@ class LoginNotice:
 
 
 class DocumentNotice:
-    """Страница документов https://electronicarchive-frontend-afds.dev.akbars.ru/document"""
+    """Страница документов ***"""
 
     # Типы документа
     DOCUMENT_TYPE_WITH_2_FIELDS = "Тестовый тип документа с 2 дополнительными полями"
     DOCUMENT_TYPE_EA_123 = "ЭА 123"
     DOCUMENT_TYPE_WITH_DIFFERENT_EXTENSIONS = "Тип документа с разными расширениями"
+    DOCUMENT_TYPE_FOR_SIGN = "For Sign"
 
     # Заголовки форм и страниц
     TITLE_DOCUMENT_TYPE_SELECTION_WINDOW = "Выбор типа документа"  # Заголовок всплывашки выбора типа документа
     TITLE_DOCUMENT = "version control"  # Название документа
     TITLE_METADATA_AND_VALUES = "Метаданные и значения"  # Заголовок метаданных
     TITLE_METADATA_EDITING = "Редактирование метаданных"  # Заголовок формы редактирования метаданных документа
+    TITLE_NAME_EDITING = "Редактирование название документа"  # Заголовок формы редактирования название документа
     TITLE_CREATE_DOCUMENT = "Создание документа"  # Заголовок формы создания документа
     TITLE_UPLOAD_FILE = "Загрузка файла"  # Заголовок формы загрузки файла
 
     SEARCH_RESULT = "Результат поиска"  # Заголовок окна результатов поиска документа
     SUCCESS_DOCUMENT_CREATE = "Документ был успешно создан"  # Уведомление об успешном создании документа
+    ERROR_INVALID_REQUEST_PARAMETERS = "Переданы некорректные параметры запроса"
+    ERROR_EMPTY_DOCUMENT_TITLE = "Поле обязательно для заполнения"
     FAILURE_DOWNLOAD_MORE_20_DOCUMENTS = "Превышено допустимое количество документов (20) для загрузки"
 
     FILE_NAME_PNG = "upload_file.png"  # PNG файл для загрузки при создании документа
@@ -43,7 +47,7 @@ class DocumentNotice:
 
 
 class EntitiesNotice:
-    """Страница сущностей https://electronicarchive-frontend-afds.dev.akbars.ru/entities"""
+    """Страница сущностей ***"""
 
     TITLE_ENTITIES = "Сущности"  # Заголовок раздела
 
@@ -56,7 +60,7 @@ class EntitiesNotice:
 
 
 class InstructionsNotice:
-    """Страница инструкций https://electronicarchive-frontend-afds.dev.akbars.ru/info?tab=Instructions"""
+    """Страница инструкций ***"""
 
     TITLE_UPDATES_AND_INSTRUCTIONS = "Обновления и инструкции"  # Заголовок раздела
     URL_INSTRUCTIONS = "{}info?tab=Instructions"  # Вкладка Инструкции
@@ -64,8 +68,7 @@ class InstructionsNotice:
 
 class DocumentsTypeNotice:
     """
-    Страница администрирования типов документов
-    https://electronicarchive-frontend-afds.dev.akbars.ru/administration
+    Страница администрирования типов документов***
     """
 
     # Заголовки окон и страниц
@@ -81,13 +84,22 @@ class DocumentsTypeNotice:
     TITLE_CHANGE_HISTORY = "История изменений групп AD"  # Окно "История изменений групп AD"
 
     # Названия для создания типа документа
-    DOCUMENT_TYPE_NAME = "DocumentTypeNameAutotest"  # Тип документа
-    FILE_TYPE_NAME = "FileTypeNameAutotest"  # Тип файла
+    DOCUMENT_TYPE_NAME = "DocTypeAutotest"  # Тип документа
+    FILE_TYPE_NAME = "FileTypeAutotest"  # Тип файла
     FILE_EXTENSIONS = ".png"  # Возможные расширения файла
-    FIELD_TYPE_NAME = "FiledTypeNameAutotest"  # Тип поля
-    FIELD_TYPE_NAME_DISPLAY = "FiledTypeNameDisplayAutotest"  # Отображаемый тип поля
+    FIELD_TYPE_NAME = "FiledTypeAutotest"  # Тип поля
+    FIELD_TYPE_NAME_DISPLAY = "FiledTypeDisplayAutotest"  # Отображаемый тип поля
 
     SUCCESS_TYPE_CREATE = "Тип документа успешно создан"
     SUCCESS_TYPE_DELETE = "Тип документа успешно удален"
     SUCCESS_FOLDER_CREATE = "Папка успешно создана"
     SUCCESS_FOLDER_SAVE = "Папка успешно изменена"
+
+
+class FilterNotice:
+    """
+    Константы для страницы фильтров
+    ***
+    """
+
+    TITLE_FILTERS = "Фильтры"  # Заголовок окна фильтров

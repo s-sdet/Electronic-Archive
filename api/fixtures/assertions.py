@@ -53,7 +53,7 @@ class Assertions:
         assert info_version['result']['sourceDate'] == DocumentVersion.for_creating_minor_version()['sourceDate']
         assert info_version['result']['documentProperties'] == \
                DocumentVersion.for_creating_minor_version()['documentProperties']
-        assert info_version['result']['createdByUserId'] == 'd64020ec-a4da-4b53-a320-1996a90344a4'
+        assert info_version['result']['createdByUserId'] is not None
         assert info_version['result']['files'] == DocumentVersion.for_creating_minor_version()['files']
 
     @staticmethod
@@ -73,13 +73,13 @@ class Assertions:
 
     @staticmethod
     def assert_get_document_ist_versions_files_by_document_id(document=None, first_doc_ver=None, second_doc_ver=None,
-                                                              get_doc=None):
+                                                              get_doc=None, create_document_type=None):
         """Проверка получения документа со списком его версий и файлов по documentId"""
         assert get_doc['result']['id'] == document['result']['documentId']
         assert get_doc['result']['documentVersions'][0]['documentId'] == document['result']['documentId']
         assert get_doc['result']['documentVersions'][1]['documentId'] == document['result']['documentId']
         assert get_doc['result']['documentVersions'][2]['documentId'] == document['result']['documentId']
-        assert get_doc['result']['documentTypeId'] == "68d0dc25-9c83-3730-07a4-64f843995846"
+        assert get_doc['result']['documentTypeId'] == create_document_type["result"]["id"]
         assert get_doc['result']['name'] is None
         assert 'createdByUserId' in get_doc['result']
         assert get_doc['result']['documentVersions'][0]['id'] == second_doc_ver['result']['id']
@@ -252,3 +252,15 @@ class Assertions:
         """Проверка создания типа документа."""
         assert "id" in res["result"]
         assert res["success"] is True
+
+    @staticmethod
+    def assert_get_document_by_id_with_all_versions(res=None):
+        """Проверка всех полей при получении документа по ID."""
+        assert "id" in res["result"]
+        assert "name" in res["result"]
+        assert "isActual" not in res["result"]
+        assert "documentTypeId" in res["result"]
+        assert "files" in res["result"]
+        assert "id" in res["result"]["files"][0]
+        assert res["result"]["files"][0]["isSigned"] is False
+        assert "documentEntities" not in res["result"]

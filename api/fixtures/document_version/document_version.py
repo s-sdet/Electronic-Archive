@@ -17,9 +17,10 @@ class DocumentVersion(BaseClass):
     URL_API_V2_DOCUMENT_VERSION = "api/v2.0/DocumentVersion/"  # Для создания версии документа. API v2.0
     URL_API_V3_DOCUMENT_VERSION = "api/v3.0/DocumentVersion/"  # Для создания версии документа. API v3.0
     URL_FILTER_FOR_GET_DOCUMENT_VERSION_BY_TYPE_ID = \
-        "?DocumentTypeId=68d0dc25-9c83-3730-07a4-64f843995846&PageNumber=1&PageSize={}"
-    URL_FILTER_FOR_GET_DOCUMENT_VERSION_BY_TYPE = \
-        "?DocumentVersion?OkzRequestNumber=1900&DebitCardNumber=1900&AccountNumber=1900&CrmClientId=1900&ApplicationId=1900&PageNumber=1&PageSize={}"
+        "?DocumentTypeId={doc_type_id}&PageNumber=1&PageSize={page_size}"
+    URL_FILTER_FOR_GET_DOCUMENT_VERSION_BY_TYPE = ("?DocumentTypeId={doc_type}&OkzRequestNumber=1900&DebitCardNumber="
+                                                   "1900&AccountNumber=1900&CrmClientId=1900&ApplicationId="
+                                                   "1900&PageNumber=1&PageSize={page_size}")
 
     FILTER_MODIFIED_DATE_FROM = '?Filters=%7B"documentTypeId": "{}","filters": []%7D&ModifiedDateFrom={}'
     FILTER_FIELD_NAME = ('?Filters=%7B"documentTypeId": "{}","filters": [%7B"fieldName": "expireDate", '
@@ -63,15 +64,32 @@ class DocumentVersion(BaseClass):
                 }
         return data
 
+    @staticmethod
+    def for_document_version_with_file(doc_id=None, file_id=None):
+        """
+        Тело запроса для создания документа с передачей ID загруженного файла и указанием начала и окончания документа.
+        :param doc_id: ID документа;
+        :param file_id: ID загруженного файла;
+        """
+        data = {
+            "documentId": doc_id,
+            "documentProperties": {},
+            "expireDate": "2024-12-31T11:11:39.8510000",
+            "sourceDate": "2023-08-04T11:11:39.8510000",
+            "files": [f"{file_id}"]
+        }
+        return data
+
     def create_document_version(self, url_api=None, header=None, data=None, response=200) -> Response:
         """Создание дополнительной версии уже созданного документа."""
         res = request(
             method="POST",
-            url=f"{self.app.url}{url_api}",
+            url=f"{self.app.url}{url_api}DocumentVersion",
             headers=header,
             json=data
         )
         logger.info(f"POST запрос на создание версии документа. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
         assert res.status_code == response
         return res.json()
 
@@ -83,6 +101,7 @@ class DocumentVersion(BaseClass):
             headers=header
         )
         logger.info(f"GET: Получение данных по ID версии документа. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
         assert res.status_code == response
         return res.json()
 
@@ -93,6 +112,7 @@ class DocumentVersion(BaseClass):
             url=f"{self.app.url}{api_version}DocumentVersion/{query_string}",
             headers=header
         )
-        logger.info(f"GET document versions by document type ID. Status code: {res.status_code}")
+        logger.info(f"GET: Получение версии документа по ID типа документа. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
         assert res.status_code == response
         return res.json()

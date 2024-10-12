@@ -10,6 +10,8 @@ from api.fixtures.document_version.set_actual.set_actual import DocumentVersionS
 from api.fixtures.validation.validation import Validation
 from api.fixtures.document_version.history.history import History
 from api.fixtures.document_link.document_link import DocumentLink
+from api.fixtures.document.filter.filter import Filter
+from api.fixtures.graphic_sign.graphic_sign import GraphicSign
 
 
 class App:
@@ -27,3 +29,5 @@ class App:
         self.validation = Validation(self)
         self.history = History(self)
         self.doc_link = DocumentLink(self)
+        self.filter = Filter(self)
+        self.graphic_sign = GraphicSign(self)

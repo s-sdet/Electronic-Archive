@@ -1,4 +1,5 @@
 .idea
+ui/tests/.pytest_cache
 .pytest_cache
 
 # Environments

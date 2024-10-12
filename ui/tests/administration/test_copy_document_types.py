@@ -4,8 +4,7 @@ from pytest_testrail.plugin import pytestrail
 
 class TestCopyDocumentsType:
     """
-    Тесты для копирования типов документов
-    https://electronicarchive-frontend-afds.dev.akbars.ru/administration
+    Тесты для копирования типов документов***
     """
 
     @pytest.mark.lp

@@ -4,8 +4,7 @@ from pytest_testrail.plugin import pytestrail
 
 class TestDownloadInstructions:
     """
-    Тесты для скачивания файлов инструкций
-    https://electronicarchive-frontend-afds.dev.akbars.ru/info?tab=Instructions
+    Тесты для скачивания файлов инструкций***
     """
 
     @pytest.mark.lp

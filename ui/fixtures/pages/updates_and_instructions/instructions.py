@@ -18,7 +18,7 @@ def deleting_png_files(directory):
 
 
 class InstructionsPage(BasePage):
-    """Страница инструкций https://electronicarchive-frontend-afds.dev.akbars.ru/info?tab=Instructions"""
+    """Страница инструкций ***"""
 
     TITLE_UPDATES_AND_INSTRUCTIONS = (By.XPATH, "//h2[text()='Обновления и инструкции']")  # Заголовок раздела
     DOWNLOAD_FILE_NAME = (By.XPATH, "//div[@aria-haspopup='listbox']")  # Название скачиваемого файла
@@ -29,7 +29,7 @@ class InstructionsPage(BasePage):
     LINK_INSTRUCTIONS = (By.XPATH, "//span[text()='Просмотр инструкций']")  # Вкладка Инструкции
 
     # Кнопки
-    BUTTON_DOWNLOAD_FILE = (By.XPATH, "//div[@class='sc-hBgdhc imvaCN']//button")  # Кнопка скачать файл инструкции
+    BUTTON_DOWNLOAD_FILE = (By.XPATH, "//div[@class='sc-bpUBKd idHsp']//button")  # Кнопка скачать файл инструкции
 
     def click_link_updates_and_instructions(self):
         """Переход в раздел Обновления и инструкции."""

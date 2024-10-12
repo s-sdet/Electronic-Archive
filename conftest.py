@@ -1,11 +1,11 @@
+import datetime
 import os
-import time
-
 import pytest
 import logging
 import random
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
 from ui.fixtures.app import Application
 from ui.data.constants import DocumentNotice, InstructionsNotice
 from ui.fixtures.pages.document.documents import DocumentsPage
@@ -18,7 +18,8 @@ def pytest_addoption(parser):
     parser.addoption(
         "--url",
         action="store",
-        default="https://electronicarchive-frontend-afds.dev.akbars.ru/",
+        default="https://***.ru/",  # DEV
+        # default="https://***.ru/",  # STAGE
         help="DEV UI url",
     ),
     parser.addoption("--headless", action="store_true", help="Headless mode"),
@@ -43,6 +44,7 @@ def app(request):
     driver = webdriver.Chrome(options=options)
     app = Application(driver, url)
     yield app
+    app.driver.close()
     app.quit()
 
 
@@ -65,7 +67,7 @@ def go_to_search(app):
 
 
 @pytest.fixture
-def go_to_entities(app):
+def go_to_entities(app, login_user):
     """Фикстура перехода в раздел Сущности."""
     app.entities.go_to_entities()
 
@@ -95,7 +97,7 @@ def random_document_data(app):
 
 
 @pytest.fixture
-def create_document(app, random_document_data):
+def create_document(app, login_user, random_document_data):
     """Фикстура создания документа с заполнением всех метаданных валидными значениями."""
     app.document.open_form_to_create_document()
     app.document.data_entry_to_create_document(doc_type=DocumentsPage.SELECT_DOCUMENT_TYPE_EA_123,
@@ -105,7 +107,7 @@ def create_document(app, random_document_data):
 
 
 @pytest.fixture()
-def create_document_with_all_fields(app, random_document_data):
+def create_document_with_all_fields(app, login_user, random_document_data):
     """Фикстура создания документа с типом документа всех полей."""
     app.document.open_form_to_create_document()
     app.document.data_entry_to_create_document(doc_type=DocumentsPage.SELECT_DOCUMENT_TYPE_WITH_ALL_FIELD_TYPES,
@@ -115,7 +117,7 @@ def create_document_with_all_fields(app, random_document_data):
 
 
 @pytest.fixture
-def create_document_with_png_file(app, random_document_data):
+def create_document_with_png_file(app, login_user, random_document_data):
     """Фикстура создания документа с загрузкой PNG файла и заполнением всех метаданных валидными значениями."""
     app.document.open_form_to_create_document()
     app.document.add_file_for_document(file_name=DocumentNotice.FILE_NAME_PNG)
@@ -126,7 +128,7 @@ def create_document_with_png_file(app, random_document_data):
 
 
 @pytest.fixture
-def create_document_with_pdf_file(app, random_document_data):
+def create_document_with_pdf_file(app, login_user, random_document_data):
     """Фикстура создания документа с загрузкой PDF файла и заполнением всех метаданных валидными значениями."""
     app.document.open_form_to_create_document()
     app.document.add_file_for_document(file_name=DocumentNotice.FILE_NAME_PDF)
@@ -220,3 +222,13 @@ def create_doc_type(app, go_to_admin_panel):
     app.doc_type.data_entry_metadata_type(data=data)
     app.doc_type.creation_type()
     return data.document_type_name
+
+
+@pytest.fixture(scope="function")
+def document_creation_date():
+    """Фикстура определения даты и времени."""
+    months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября',
+              'ноября', 'декабря']
+    mont = int(datetime.date.today().strftime("%m"))
+    date = datetime.datetime.today().strftime(f"%d {months[mont-1]} %Y, %H:%M")
+    return date

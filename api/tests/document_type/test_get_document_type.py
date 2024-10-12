@@ -14,7 +14,7 @@ class TestsGetDocumentType:
         C17483107: Позитивный тест поиска типа документа не связанного с папкой, по части названия типа документа (name)
         C17468155: Позитивный тест поиска типа документа по части названия типа документа (name).
         """
-        res = app.doc_type.get_document_type(
+        res = app.doc_type.search_doc_type_by_name(
             header=auth,
             key=name
         )

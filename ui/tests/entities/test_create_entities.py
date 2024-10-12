@@ -4,12 +4,11 @@ from ui.fixtures.pages.entities.entities import CreateEntitiesModel
 
 class TestCreateEntities:
     """
-    Тесты для создания документов
-    https://electronicarchive-frontend-afds.dev.akbars.ru/entities/create
+    Тесты для создания документов***
     """
 
     @pytestrail.case("C15723466")
-    def test_create_entity(self, app, login_user, go_to_entities):
+    def test_create_entity(self, app, go_to_entities):
         """
         Тест создания сущности.
         :param go_to_entities: Переход в раздел Сущности.

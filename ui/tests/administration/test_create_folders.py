@@ -4,8 +4,7 @@ from pytest_testrail.plugin import pytestrail
 
 class TestFolder:
     """
-    Тесты для создания папок типов документов
-    https://electronicarchive-frontend-afds.dev.akbars.ru/administration
+    Тесты для создания папок типов документов***
     """
 
     @pytest.mark.lp

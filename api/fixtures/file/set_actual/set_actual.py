@@ -17,9 +17,10 @@ class SetActual(BaseClass):
         """Установка актуальности файла нужной версии документа."""
         res = request(
             method="PUT",
-            url=f"{self.app.url}{api_version}File/{file_id}/setActual/{is_actual}",
+            url=f"{self.app.url}{api_version}File/{file_id}/SetActual/{is_actual}",
             headers=header
         )
-        logger.info(f"PUT запрос установка актуальности файла. Ответ: {res.status_code}")
+        logger.info(f"PUT: Установка актуальности файла. Ответ: {res.status_code}")
+        logger.info(f"JSON: {res.json()}")
         assert res.status_code == response
         return res.json()
